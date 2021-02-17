@@ -15,7 +15,11 @@ export default function DayList(props) {
     setDay={props.setDay}  />
     )
   })
-  return days;
+  return (
+  <ul>
+    {days}
+  </ul>
+  )
 }
 
 
