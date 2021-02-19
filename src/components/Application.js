@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment"
-
+import { getAppointmentsForDay }  from "../helpers/selectors"
+import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
 
 const appointments = [
@@ -63,30 +64,62 @@ const appointments = [
 
 export default function Application(props) {
   const url = "http://localhost:8001";
-  const setDay = day => setState({ ...state, day });
-  const setDays = (days) => {
-    setState(prev => ({ ...prev, days }));
-}
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: {},
   });
-  useEffect(() => {
-    axios.get(url + "/api/days")
-    .then((response) => {
-      setDays(response.data);
-    }, [])
-    .catch((error) => {
-      console.log(error.response.status);
-      console.log(error.response.headers);
-      console.log(error.response.data);
-    });
-}, [])
-
+  let dailyAppointments = [];
   
+  const setDay = day => setState({ ...state, day });
+  // const setDays = (days) => {
+  //   setState(prev => ({ ...prev, days }));
+  // }
+//   useEffect(() => {
+//     axios.get(url + "/api/days")
+//     .then((response) => {
+//       setDays(response.data);
+//       dailyAppointments = getAppointmentsForDay(state, state.day)
+//     }, [])
+//     .catch((error) => {
+//       console.log(error.response.status);
+//       console.log(error.response.headers);
+//       console.log(error.response.data);
+//     });
+// }, [])
 
-  const interviewSchedule = appointments.map (appointment => {
+    
+  useEffect(() => {
+    Promise.all([axios.get(url + "/api/days"), 
+      axios.get(url + "/api/appointments"), 
+      axios.get(url + "/api/interviewers")
+    
+    ])
+  
+    .then((all => {
+      const [daysResponse, aptsResponse, interviewersResponse] = all;
+      console.log(all);
+      setState(prev => ({...prev, 
+        days: daysResponse.data, 
+        appointments: aptsResponse.data,
+        interviewers: interviewersResponse.data
+      }));
+      dailyAppointments = getAppointmentsForDay(state, state.day);
+    }))
+    .catch((error) => {
+      console.log(error);
+      // console.log(error.response.status);
+      // console.log(error.response.headers);
+      // console.log(error.response.data);
+    });
+  }, [])
+
+
+
+
+
+  const interviewSchedule = dailyAppointments.map (appointment => {
    return (
      <Appointment key={appointment.id} {...appointment} />
      )

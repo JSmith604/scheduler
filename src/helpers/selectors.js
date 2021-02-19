@@ -14,3 +14,5 @@ export function getAppointmentsForDay(state, day) {
   
   return appointmentArray;
 }
+
+// export function getInterviewerForAppointment()
