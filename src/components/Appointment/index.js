@@ -6,6 +6,7 @@ import Empty from "components/Appointment/Empty";
 
 import Show from "components/Appointment/Show";
 import { create } from "react-test-renderer";
+import useVisualMode from "hooks/useVisualMode";
 
 // import Status from "components/Appointment/Status";
 
@@ -13,16 +14,16 @@ import { create } from "react-test-renderer";
 
 // import Form from "components/Appointment/Form";
 // CREATE 
-// EMPTY
-// SHOW
+const EMPTY = "EMPTY";
+const SHOW = "SHOW";
 
 
 
 export default function Appointment(props) {
  console.log(props);
-  // const { mode, transition, back } = useVisualMode(
-  //   props.interview ? SHOW: EMPTY
-  // );
+  const { mode, transition, back } = useVisualMode(
+    props.interview ? SHOW: EMPTY
+  );
 
 //  const save = function() {
 //   const interview = {
@@ -49,8 +50,14 @@ export default function Appointment(props) {
    
     <article className="appointment">
       <Header time={props.time}/>
-      {props.interview ? (<Show student={props.interview.student} interviewer={props.interview.interviewer} />) : (<Empty />)}
+      {mode === EMPTY && 
+        <Empty onAdd={() => console.log("Clicked onAdd")} />}
+      {mode === SHOW && (
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+        />
+      )}
     </article>
-    )
-    
+  ) 
 }

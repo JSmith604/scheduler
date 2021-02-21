@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment"
-import { getAppointmentsForDay }  from "../helpers/selectors"
+import { getAppointmentsForDay, getInterview }  from "../helpers/selectors"
 import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
+
 
 // const appointments = [
 //   {
@@ -73,21 +74,7 @@ export default function Application(props) {
   let dailyAppointments = [];
   
   const setDay = day => setState({ ...state, day });
-  // const setDays = (days) => {
-  //   setState(prev => ({ ...prev, days }));
-  // }
-//   useEffect(() => {
-//     axios.get(url + "/api/days")
-//     .then((response) => {
-//       setDays(response.data);
-//       dailyAppointments = getAppointmentsForDay(state, state.day)
-//     }, [])
-//     .catch((error) => {
-//       console.log(error.response.status);
-//       console.log(error.response.headers);
-//       console.log(error.response.data);
-//     });
-// }, [])
+ 
 
     
   useEffect(() => {
@@ -115,26 +102,26 @@ export default function Application(props) {
     });
   }, [])
 
-  const bookInterview = function(id, interview) {
-    console.log("Application.bookInterview()", id, interview);
-    oldAppointment = state.appointments[id];
-    const newAppointment = {
-      ...oldAppointment
-    }
-    const appointment = {
-      ...state.appointments[id],
-      interview: {...interview },
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    const url = `/api/appointments${id}`;
-    axios.put(url, appointment)
-      .then(() => {
-        setState({ ...state, appointment});
-      });
-  };
+  // const bookInterview = function(id, interview) {
+  //   console.log("Application.bookInterview()", id, interview);
+    // oldAppointment = state.appointments[id];
+    // const newAppointment = {
+    //   ...oldAppointment
+    // }
+  //   const appointment = {
+  //     ...state.appointments[id],
+  //     interview: {...interview },
+  //   };
+  //   const appointments = {
+  //     ...state.appointments,
+  //     [id]: appointment,
+  //   };
+  //   const url = `/api/appointments${id}`;
+  //   axios.put(url, appointment)
+  //     .then(() => {
+  //       setState({ ...state, appointment});
+  //     });
+  // };
 
 
 
