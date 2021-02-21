@@ -72,6 +72,7 @@ export default function Application(props) {
     interviewers: {},
   });
   let dailyAppointments = [];
+  let schedule = [];
   
   const setDay = day => setState({ ...state, day });
  
@@ -86,13 +87,24 @@ export default function Application(props) {
   
     .then((all => {
       const [daysResponse, aptsResponse, interviewersResponse] = all;
-      console.log(all);
       setState(prev => ({...prev, 
         days: daysResponse.data, 
         appointments: aptsResponse.data,
         interviewers: interviewersResponse.data
       }));
       dailyAppointments = getAppointmentsForDay(state, state.day);
+       schedule = dailyAppointments.map (appointment => {
+        const interview = getInterview(state, appointment.interview);
+        console.log(appointment);
+        return (
+          <Appointment
+            key={appointment.id}
+            id={appointment.id}
+            time={appointment.time}
+            interview={interview}
+           />
+          )
+        })
     }))
     .catch((error) => {
       console.log(error);
@@ -125,17 +137,7 @@ export default function Application(props) {
 
 
 
-  const schedule = dailyAppointments.map (appointment => {
-    const interview = getInterview(state, appointment.interview);
-   return (
-     <Appointment
-        key={appointment.id}
-        id={appointment.id}
-        time={appointment.time}
-        interview={interview}
-    />
-     )
- })
+  
   return (
     <main className="layout">
       <section className="sidebar">
