@@ -15,4 +15,13 @@ export function getAppointmentsForDay(state, day) {
   return appointmentArray;
 }
 
-// export function getInterviewerForAppointment()
+export function getInterview(state, interview) {
+    if(state.interviewers && interview) {
+      const interviewerID = interview.interviewer
+      interview.interviewer = state.interviewers[interviewerID]
+      if(interview.interviewer) {
+        return interview;
+      }
+    }
+  return null;
+}

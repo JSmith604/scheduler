@@ -6,60 +6,60 @@ import { getAppointmentsForDay }  from "../helpers/selectors"
 import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
 
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-    interview: {
-      student: "Alice Jones",
-      interviewer: {
-        id: 2,
-        name: "Tori Malcolm",
-        avatar:"https://i.imgur.com/LpaY82x.png"
-      }
-    }
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Mark McMorris",
-      interviewer: {
-        id: 3,
-        name: "Mildred Nazir",
-        avatar:"https://i.imgur.com/T2WwVfS.png"
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "4pm",
-    interview: {
-      student: "Chloe Kim",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg"
-      }
-    }
-  }
-];
+// const appointments = [
+//   {
+//     id: 1,
+//     time: "12pm",
+//   },
+//   {
+//     id: 2,
+//     time: "1pm",
+//     interview: {
+//       student: "Lydia Miller-Jones",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   },
+//   {
+//     id: 3,
+//     time: "2pm",
+//     interview: {
+//       student: "Alice Jones",
+//       interviewer: {
+//         id: 2,
+//         name: "Tori Malcolm",
+//         avatar:"https://i.imgur.com/LpaY82x.png"
+//       }
+//     }
+//   },
+//   {
+//     id: 4,
+//     time: "3pm",
+//     interview: {
+//       student: "Mark McMorris",
+//       interviewer: {
+//         id: 3,
+//         name: "Mildred Nazir",
+//         avatar:"https://i.imgur.com/T2WwVfS.png"
+//       }
+//     }
+//   },
+//   {
+//     id: 5,
+//     time: "4pm",
+//     interview: {
+//       student: "Chloe Kim",
+//       interviewer: {
+//         id: 4,
+//         name: "Cohana Roy",
+//         avatar: "https://i.imgur.com/FK8V841.jpg"
+//       }
+//     }
+//   }
+// ];
 
 
 export default function Application(props) {
@@ -115,13 +115,38 @@ export default function Application(props) {
     });
   }, [])
 
+  const bookInterview = function(id, interview) {
+    console.log("Application.bookInterview()", id, interview);
+    oldAppointment = state.appointments[id];
+    const newAppointment = {
+      ...oldAppointment
+    }
+    const appointment = {
+      ...state.appointments[id],
+      interview: {...interview },
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    const url = `/api/appointments${id}`;
+    axios.put(url, appointment)
+      .then(() => {
+        setState({ ...state, appointment});
+      });
+  };
 
 
 
-
-  const interviewSchedule = dailyAppointments.map (appointment => {
+  const schedule = dailyAppointments.map (appointment => {
+    const interview = getInterview(state, appointment.interview);
    return (
-     <Appointment key={appointment.id} {...appointment} />
+     <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+    />
      )
  })
   return (
@@ -147,7 +172,7 @@ export default function Application(props) {
           />
       </section>
       <section className="schedule">
-        {interviewSchedule} 
+         { schedule }  
         <Appointment key="last" time="5pm" />
       </section>
     </main>
