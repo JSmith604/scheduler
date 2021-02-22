@@ -30,16 +30,12 @@ export function getInterview(state, interview) {
 
 export function getInterviewersForDay(state, day) {
   let interviewerArray = [];
-  let appointmentsForDay = getAppointmentsForDay(state, day);
-
-  for (let appointment of appointmentsForDay) {
-    if(appointment.interview && appointment.interview.interviewer) {
-      let id = appointment.interview.interviewer;
-      let interviewerObj = state.interviewers[id];
-      if(!interviewerArray.includes(interviewerObj)) {
-        interviewerArray.push(interviewerObj);
-      }
-    } 
+  let today = state.days.find(dayElement => {
+    return dayElement.name === day;
+  })
+  for (let interviewerID of today.interviewers) {
+    const interviewerOBJ = state.interviewers[interviewerID] 
+    interviewerArray.push(interviewerOBJ);
   }
   return interviewerArray;
 }

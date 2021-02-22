@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment"
-import { getAppointmentsForDay, getInterview }  from "../helpers/selectors"
+import { getAppointmentsForDay, getInterview, getInterviewersForDay }  from "../helpers/selectors"
 import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
 
@@ -79,10 +79,25 @@ export default function Application(props) {
   dailyAppointments = getAppointmentsForDay(state, state.day);
   console.log("dailyAppointments",dailyAppointments)
 
- 
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    console.log(id, interview);
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    setState({
+      ...state,
+      appointments
+    });
+  }
+
   schedule = dailyAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
-    
+    const interviewers = getInterviewersForDay(state, state.day);
     console.log("appointment", appointment);
     return (
       <Appointment
@@ -90,6 +105,8 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewers}
+        bookInterview={bookInterview}
        />
       )
     })
@@ -111,26 +128,16 @@ export default function Application(props) {
         appointments: aptsResponse.data,
         interviewers: interviewersResponse.data
       });
-      
-
-      console.log("state", state);
-
-   
     }))
     .catch((error) => {
       console.log(error);
-      // console.log(error.response.status);
-      // console.log(error.response.headers);
-      // console.log(error.response.data);
     });
   }, []);
 
 
 
-  function bookInterview(id, interview) {
-    console.log(id, interview);
-
-  }
+  
+ 
 
   // const bookInterview = function(id, interview) {
   //   console.log("Application.bookInterview()", id, interview);
@@ -181,7 +188,9 @@ export default function Application(props) {
       <section className="schedule">
          { schedule }  
         
-        <Appointment key="last" time="5pm" />
+        <Appointment 
+        interviewers= {[]}
+        key="last" time="5pm" />
       </section>
     </main>
   );

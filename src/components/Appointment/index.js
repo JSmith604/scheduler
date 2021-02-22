@@ -14,6 +14,8 @@ import useVisualMode from "hooks/useVisualMode";
 
 import Form from "components/Appointment/Form";
 
+import { getInterviewersForDay } from "helpers/selectors";
+
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -26,26 +28,26 @@ export default function Appointment(props) {
     props.interview ? SHOW: EMPTY
   );
 
-
-//  const save = function(name, interviewer) {
-//   const interview = {
-//     student: name,
-//     interviewer,
-//   };
-//   bookInterview();
-//  }
-
-//   transition(SAVING)
-//   props.bookInterview(props.id, interview)
-//     .then(() => {
-//       transition(SHOW);
-//     });
+ 
+  
+ const save = function(name, interviewer) {
+  const interview = {
+    student: name,
+    interviewer,
+  };
+  
+  props.bookInterview(props.id, interview)
+  transition(SHOW);
+ 
+}
+  // transition(SAVING)
+  // props.bookInterview(props.id, interview)
+    // .then(() => {
+    //   transition(SHOW);
+    // });
   
 // };
 
-// const bookInterview = function(id, interview) {
-//   console.log("bookInterview()", id, interview);
-// };
 
 
 
@@ -64,10 +66,10 @@ console.log("mode", mode);
       )}
       {mode === CREATE && (
         <Form onCancel={() => back()}
-        name = {props.interview.student}
-        interviewers= {[]}
-        interviewer= {props.interview.interviewer}
-        // onSave={save}
+        // name = {props.interview.student}
+        interviewers= {props.interviewers}
+        // interviewer= {props.interview.interviewer}
+        onSave={save}
         
         />
       )}
