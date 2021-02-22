@@ -21,17 +21,19 @@ const CREATE = "CREATE";
 
 
 export default function Appointment(props) {
-  console.log(props);
+  console.log("props", props);
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW: EMPTY
   );
 
 
-//  const save = function() {
+//  const save = function(name, interviewer) {
 //   const interview = {
 //     student: name,
 //     interviewer,
 //   };
+//   bookInterview();
+//  }
 
 //   transition(SAVING)
 //   props.bookInterview(props.id, interview)
@@ -47,10 +49,10 @@ export default function Appointment(props) {
 
 
 
-
+console.log("mode", mode);
   return (
    
-    <article className="appointment">
+    <article className="appointments">
       <Header time={props.time}/>
       {mode === EMPTY && 
         <Empty onAdd={() => transition(CREATE)} />}
@@ -65,8 +67,8 @@ export default function Appointment(props) {
         name = {props.interview.student}
         interviewers= {[]}
         interviewer= {props.interview.interviewer}
-        // onSave={action("onSave")}
-
+        // onSave={save}
+        
         />
       )}
     </article>

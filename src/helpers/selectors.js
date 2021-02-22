@@ -1,9 +1,11 @@
 import React from "react"
 
 export function getAppointmentsForDay(state, day) {
+  console.log("state", state);
+  console.log("day", day);
   let appointmentArray = [];
   for (let dayObj of state.days) {
-
+    console.log("dayObj", dayObj);
     if (dayObj.name === day) {
       for (let appointment of dayObj.appointments) {
         appointmentArray.push(state.appointments[appointment])

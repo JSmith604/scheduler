@@ -75,36 +75,47 @@ export default function Application(props) {
   let schedule = [];
   
   const setDay = day => setState({ ...state, day });
- 
 
+  dailyAppointments = getAppointmentsForDay(state, state.day);
+  console.log("dailyAppointments",dailyAppointments)
+
+ 
+  schedule = dailyAppointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+    
+    console.log("appointment", appointment);
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+       />
+      )
+    })
     
   useEffect(() => {
-    Promise.all([axios.get(url + "/api/days"), 
+    Promise.all([
+      axios.get(url + "/api/days"), 
       axios.get(url + "/api/appointments"), 
       axios.get(url + "/api/interviewers")
-    
-    ])
-  
-    .then((all => {
+    ]).then((all => {
+      console.log("all", all);
+      
       const [daysResponse, aptsResponse, interviewersResponse] = all;
-      setState(prev => ({...prev, 
-        days: daysResponse.data, 
+      console.log("daysResponse", daysResponse.data);
+      console.log("apts", aptsResponse.data);
+      console.log("interviewersResponse", interviewersResponse.data);
+      setState({...state, 
+        days: daysResponse.data,
         appointments: aptsResponse.data,
         interviewers: interviewersResponse.data
-      }));
-      dailyAppointments = getAppointmentsForDay(state, state.day);
-       schedule = dailyAppointments.map (appointment => {
-        const interview = getInterview(state, appointment.interview);
-        console.log(appointment);
-        return (
-          <Appointment
-            key={appointment.id}
-            id={appointment.id}
-            time={appointment.time}
-            interview={interview}
-           />
-          )
-        })
+      });
+      
+
+      console.log("state", state);
+
+   
     }))
     .catch((error) => {
       console.log(error);
@@ -112,7 +123,14 @@ export default function Application(props) {
       // console.log(error.response.headers);
       // console.log(error.response.data);
     });
-  }, [])
+  }, []);
+
+
+
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+
+  }
 
   // const bookInterview = function(id, interview) {
   //   console.log("Application.bookInterview()", id, interview);
@@ -162,6 +180,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
          { schedule }  
+        
         <Appointment key="last" time="5pm" />
       </section>
     </main>
