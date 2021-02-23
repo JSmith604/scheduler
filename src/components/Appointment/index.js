@@ -8,7 +8,7 @@ import Show from "components/Appointment/Show";
 import { create } from "react-test-renderer";
 import useVisualMode from "hooks/useVisualMode";
 
-// import Status from "components/Appointment/Status";
+import Status from "components/Appointment/Status";
 
 // import Error from "components/Appointment/Error";
 
@@ -19,7 +19,7 @@ import { getInterviewersForDay } from "helpers/selectors";
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
-
+const SAVING = "SAVING";
 
 
 export default function Appointment(props) {
@@ -36,18 +36,15 @@ export default function Appointment(props) {
     interviewer,
   };
   
-  props.bookInterview(props.id, interview)
-  transition(SHOW);
  
-}
-  // transition(SAVING)
-  // props.bookInterview(props.id, interview)
-    // .then(() => {
-    //   transition(SHOW);
-    // });
-  
-// };
 
+  transition(SAVING)
+  props.bookInterview(props.id, interview)
+    .then (() => {
+      transition(SHOW);
+    });
+};
+  
 
 
 
@@ -60,8 +57,8 @@ console.log("mode", mode);
         <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
         <Show
-          student={props.interview.student}
-          interviewer={props.interview.interviewer}
+          student={props.interview && props.interview.student}
+          interviewer={props.interview && props.interview.interviewer}
         />
       )}
       {mode === CREATE && (
@@ -72,6 +69,9 @@ console.log("mode", mode);
         onSave={save}
         
         />
+      )}
+      {mode === SAVING && (
+        <Status message= "Saving Interview"/>
       )}
     </article>
   ) 
