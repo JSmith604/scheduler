@@ -7,6 +7,7 @@ import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
 
 
+
 // const appointments = [
 //   {
 //     id: 1,
@@ -97,7 +98,10 @@ export default function Application(props) {
         ...prev,
         appointments
       }));
-    })   
+    }) 
+    .catch((err) => {
+      console.log(err);
+    })  
   }
 
   function deleteInterview(id) { 

@@ -37,8 +37,10 @@ export default function Appointment(props) {
   const interview = {
     student: name,
     interviewer,
+    
   };
   
+  console.log("interview:", interview);
 
   transition(SAVING)
   props.bookInterview(props.id, interview)
@@ -93,7 +95,7 @@ export default function Appointment(props) {
          <Form onCancel={() => back()}
          name = {props.interview.student}
          interviewers= {props.interviewers}
-         interviewer= {props.interview.interviewer}
+         interviewer= {props.interview.interviewer.id}
          onSave={save}
          />
       )}
