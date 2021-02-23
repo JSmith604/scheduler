@@ -67,6 +67,7 @@ export default function Appointment(props) {
         <Show
           student={props.interview && props.interview.student}
           interviewer={props.interview && props.interview.interviewer}
+          onEdit={() => transition(EDIT)}
           onDelete={() => transition(CONFIRM)}
         />
       )}
@@ -87,7 +88,14 @@ export default function Appointment(props) {
         onConfirm={() => deleteInterview(props.id)}
         onCancel={() => back()}
         />
-        
+      )}
+      {mode === EDIT && (
+         <Form onCancel={() => back()}
+         name = {props.interview.student}
+         interviewers= {props.interviewers}
+         interviewer= {props.interview.interviewer}
+         onSave={save}
+         />
       )}
     </article>
   ) 
