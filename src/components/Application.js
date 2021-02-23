@@ -99,9 +99,6 @@ export default function Application(props) {
         appointments
       }));
     }) 
-    .catch((err) => {
-      console.log(err);
-    })  
   }
 
   function deleteInterview(id) { 
