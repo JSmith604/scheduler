@@ -77,24 +77,26 @@ export default function Application(props) {
   const setDay = day => setState({ ...state, day });
 
   dailyAppointments = getAppointmentsForDay(state, state.day); 
-  console.log("dailyAppointments",dailyAppointments)
+  
 
   function bookInterview(id, interview) { 
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }  
     };
+    console.log("appointment:", appointment);
     
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
+    console.log("second appointment:", appointments);
     return axios.put(url + "/api/appointments/" + id, appointment) 
     .then(()=> {
-      setState({
-        ...state,
+      setState( prev => ({
+        ...prev,
         appointments
-      });
+      }));
     })   
   }
 
@@ -108,6 +110,7 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
+ 
     return axios.delete(url + "/api/appointments/" + id) 
     .then(()=> {
       setState({
@@ -117,10 +120,11 @@ export default function Application(props) {
     })   
   }
 
+  console.log("daily appointments", dailyAppointments);
   schedule = dailyAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
     const interviewers = getInterviewersForDay(state, state.day);
-    console.log("appointment", appointment);
+  
     return (
       <Appointment
         key={appointment.id}
@@ -140,12 +144,10 @@ export default function Application(props) {
       axios.get(url + "/api/appointments"), 
       axios.get(url + "/api/interviewers")
     ]).then((all => {
-      console.log("all", all);
+     
       
       const [daysResponse, aptsResponse, interviewersResponse] = all;
-      console.log("daysResponse", daysResponse.data);
-      console.log("apts", aptsResponse.data);
-      console.log("interviewersResponse", interviewersResponse.data);
+      
       setState({...state, 
         days: daysResponse.data,
         appointments: aptsResponse.data,

@@ -1,0 +1,50 @@
+# Query: console.log
+# ContextLines: 1
+
+13 results - 3 files
+
+src/components/Application.js:
+   79    dailyAppointments = getAppointmentsForDay(state, state.day); 
+   80:  
+   81  
+
+   86      };
+   87:     console.log("appointment:", appointment);
+   88      
+
+   92      };
+   93:     console.log("second appointment:", appointment);
+   94      return axios.put(url + "/api/appointments/" + id, appointment) 
+
+  122  
+  123:   console.log("daily appointments", dailyAppointments);
+  124    schedule = dailyAppointments.map(appointment => {
+
+  146      ]).then((all => {
+  147:    
+  148        
+  149        const [daysResponse, aptsResponse, interviewersResponse] = all;
+  150:       
+  153        setState({...state, 
+
+  159      .catch((error) => {
+  160:       console.log(error);
+  161      });
+
+  169    // const bookInterview = function(id, interview) {
+  170:   //   console.log("Application.bookInterview()", id, interview);
+  171      // oldAppointment = state.appointments[id];
+
+src/components/Appointment/index.js:
+  26  export default function Appointment(props) {
+  27: 
+  28    const { mode, transition, back } = useVisualMode(
+
+  56  
+  57:
+  58    return (
+
+src/components/Appointment/Show.js:
+  5  export default function Show(props) {
+  6: //  console.log(props);
+  7    return(
