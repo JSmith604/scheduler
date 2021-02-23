@@ -1,18 +1,20 @@
 import React from "react";
-import Styles from "components/Appointment/styles.scss";
-import Header from "components/Appointment/Header";
+import Styles from "./styles.scss";
+import Header from "./Header";
 
-import Empty from "components/Appointment/Empty";
+import Empty from "./Empty";
 
-import Show from "components/Appointment/Show";
+import Show from "./Show";
 import { create } from "react-test-renderer";
 import useVisualMode from "hooks/useVisualMode";
 
-import Status from "components/Appointment/Status";
+import Status from "./Status";
 
 // import Error from "components/Appointment/Error";
 
-import Form from "components/Appointment/Form";
+import Form from "./Form";
+
+import Confirm from "./Confirm";
 
 import { getInterviewersForDay } from "helpers/selectors";
 
@@ -20,7 +22,8 @@ const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
-
+const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 
 export default function Appointment(props) {
@@ -64,7 +67,7 @@ export default function Appointment(props) {
         <Show
           student={props.interview && props.interview.student}
           interviewer={props.interview && props.interview.interviewer}
-          onDelete={() => deleteInterview(props.id) }
+          onDelete={() => transition(CONFIRM)}
         />
       )}
       {mode === CREATE && (
@@ -78,6 +81,13 @@ export default function Appointment(props) {
       )}
       {mode === SAVING && (
         <Status message= "Saving Interview"/>
+      )}
+      {mode === CONFIRM && (
+        <Confirm message = "Are you sure you want to delete the interview?"
+        onConfirm={() => deleteInterview(props.id)}
+        onCancel={() => back()}
+        />
+        
       )}
     </article>
   ) 
