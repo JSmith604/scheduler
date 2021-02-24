@@ -108,6 +108,8 @@ export default function Appointment(props) {
          onSave={save}
          />
       )}
+
+
       {mode === ERROR_DELETE && (
         <Error message = "Could not cancel appointment"
         onCancel={() => back()}

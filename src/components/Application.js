@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
-import Appointment from "./Appointment"
+import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay }  from "../helpers/selectors"
 import { queryHelpers } from "@testing-library/react";
 import "./Application.scss";
+import useApplicationData from "../hooks/useApplicationData"
 
 
 
@@ -65,100 +66,124 @@ import "./Application.scss";
 
 
 export default function Application(props) {
-  const url = "http://localhost:8001";
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {},
-  });
-  let dailyAppointments = [];
-  let schedule = [];
+  // const url = "http://localhost:8001";  //previous commit
+  // const [state, setState] = useState({
+  //   day: "Monday",
+  //   days: [],
+  //   appointments: {},
+  //   interviewers: {},
+  // });
+  // let dailyAppointments = [];
+  // let schedule = [];
+
+  const {
+    state,
+    setDay,
+    bookInterview,
+    deleteInterview
+  } = useApplicationData();
   
-  const setDay = day => setState({ ...state, day });
+  // const setDay = day => setState({ ...state, day }); //Previous commit 
 
-  dailyAppointments = getAppointmentsForDay(state, state.day); 
+  // dailyAppointments = getAppointmentsForDay(state, state.day);  //Previous
+  const interviewers =getInterviewersForDay(state, state.day);
+
+  const appointments = getAppointmentsForDay(state, state.day).map(
+    appointment => {
+      return (
+        <Appointment
+          key={appointment.id}
+          {...appointment}
+          interview={getInterview(state, appointment.interview)}
+          interviewers={interviewers}
+          bookInterview={bookInterview}
+          deleteInterview={deleteInterview}
+        />
+      );
+    }
+  );
+  
   
 
-  function bookInterview(id, interview) { 
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }  
-    };
-    console.log("appointment:", appointment);
+  // function bookInterview(id, interview) { //previous commit
+  //   const appointment = {
+  //     ...state.appointments[id],
+  //     interview: { ...interview }  
+  //   };
+   
     
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    console.log("second appointment:", appointments);
-    return axios.put(url + "/api/appointments/" + id, appointment) 
-    .then(()=> {
-      setState( prev => ({
-        ...prev,
-        appointments
-      }));
-    }) 
-  }
+  //   const appointments = {
+  //     ...state.appointments,
+  //     [id]: appointment
+  //   };
+   
+  //   return axios.put(url + "/api/appointments/" + id, appointment) 
+  //   .then(()=> {
+  //     setState( prev => ({
+  //       ...prev,
+  //       appointments
+  //     }));
+  //   }) 
+  // }
 
-  function deleteInterview(id) { 
-    const appointment = {
-      ...state.appointments[id],
-      interview: null  
-    };
+  // function deleteInterview(id) { 
+  //   const appointment = {
+  //     ...state.appointments[id],
+  //     interview: null  
+  //   };
     
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
+  //   const appointments = {
+  //     ...state.appointments,
+  //     [id]: appointment
+  //   };
  
-    return axios.delete(url + "/api/appointments/" + id) 
-    .then(()=> {
-      setState({
-        ...state,
-        appointments
-      });
-    })   
-  }
+  //   return axios.delete(url + "/api/appointments/" + id) 
+  //   .then(()=> {
+  //     setState({
+  //       ...state,
+  //       appointments
+  //     });
+  //   })   
+  // }
 
-  console.log("daily appointments", dailyAppointments);
-  schedule = dailyAppointments.map(appointment => {
-    const interview = getInterview(state, appointment.interview);
-    const interviewers = getInterviewersForDay(state, state.day);
   
-    return (
-      <Appointment
-        key={appointment.id}
-        id={appointment.id}
-        time={appointment.time}
-        interview={interview}
-        interviewers={interviewers}
-        bookInterview={bookInterview}
-        deleteInterview={deleteInterview}
-       />
-      )
-    })
+  // schedule = dailyAppointments.map(appointment => {
+  //   const interview = getInterview(state, appointment.interview);
+  //   const interviewers = getInterviewersForDay(state, state.day);
+  
+  //   return (
+  //     <Appointment
+  //       key={appointment.id}
+  //       id={appointment.id}
+  //       time={appointment.time}
+  //       interview={interview}
+  //       interviewers={interviewers}
+  //       bookInterview={bookInterview}
+  //       deleteInterview={deleteInterview}
+  //      />
+  //     )
+  //   })
     
-  useEffect(() => {
-    Promise.all([
-      axios.get(url + "/api/days"), 
-      axios.get(url + "/api/appointments"), 
-      axios.get(url + "/api/interviewers")
-    ]).then((all => {
+  // useEffect(() => {
+  //   Promise.all([
+  //     axios.get(url + "/api/days"), 
+  //     axios.get(url + "/api/appointments"), 
+  //     axios.get(url + "/api/interviewers")
+  //   ]).then((all => {
      
       
-      const [daysResponse, aptsResponse, interviewersResponse] = all;
+  //     const [daysResponse, aptsResponse, interviewersResponse] = all;
       
-      setState({...state, 
-        days: daysResponse.data,
-        appointments: aptsResponse.data,
-        interviewers: interviewersResponse.data
-      });
-    }))
-    .catch((error) => {
-      console.log(error);
-    });
-  }, []);
+  //     setState({...state, 
+  //       days: daysResponse.data,
+  //       appointments: aptsResponse.data,
+  //       interviewers: interviewersResponse.data
+  //     });
+  //   }))
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  // }, []);
 
 
 
@@ -212,7 +237,7 @@ export default function Application(props) {
           />
       </section>
       <section className="schedule">
-         { schedule }  
+         { appointments }  
         
         <Appointment 
         interviewers= {[]}

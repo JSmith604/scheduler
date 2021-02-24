@@ -32,9 +32,11 @@ export function getInterviewersForDay(state, day) {
   let today = state.days.find(dayElement => {
     return dayElement.name === day;
   })
+ if (today) {
   for (let interviewerID of today.interviewers) {
     const interviewerOBJ = state.interviewers[interviewerID] 
     interviewerArray.push(interviewerOBJ);
   }
+ }
   return interviewerArray;
 }
