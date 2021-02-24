@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay }  from "../helpers/selectors"
+import { getAppointmentsForDay, getInterview, getInterviewersForDay, getRemainingSpotsForDay, addSpotsRemainingPerDay }  from "../helpers/selectors"
 import { queryHelpers } from "@testing-library/react";
 import "../components/Application.scss";
 
@@ -29,12 +29,15 @@ const setDay = day => setState({ ...state, day });
       ...state.appointments,
       [id]: appointment
     };
+
+    const days = addSpotsRemainingPerDay(state.days, appointments)
     
     return axios.put(url + "/api/appointments/" + id, appointment) 
     .then(()=> {
       setState( prev => ({
         ...prev,
-        appointments
+        appointments,
+        days
       }));
     }) 
   }
@@ -50,11 +53,14 @@ const setDay = day => setState({ ...state, day });
       [id]: appointment
     };
   
+    const days = addSpotsRemainingPerDay(state.days, appointments)
+
     return axios.delete(url + "/api/appointments/" + id) 
     .then(()=> {
       setState({
         ...state,
-        appointments
+        appointments,
+        days
       });
     })   
   }

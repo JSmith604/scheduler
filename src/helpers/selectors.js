@@ -40,3 +40,21 @@ export function getInterviewersForDay(state, day) {
  }
   return interviewerArray;
 }
+
+
+export function getRemainingSpotsForDay (day, appointments) {
+    let availableSpots = 0;
+    day.appointments.forEach( appointmentID => {
+      if(appointments[appointmentID].interview === null) {
+      availableSpots ++
+      }
+    })
+    return availableSpots;
+}
+
+export function addSpotsRemainingPerDay (days, appointments) {
+  const daysWithAvailableSpots = days.map(day => {
+    return {...day, spots: getRemainingSpotsForDay(day, appointments)}
+  })
+  return daysWithAvailableSpots;
+}
