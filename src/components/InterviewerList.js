@@ -2,9 +2,12 @@ import React from "react";
 import InterviewerListItem from "./InterviewerListItem.js";
 import InterviewerListStyle from "components/InterviewerList.scss";
 import classnames from "classnames";
+import PropTypes, { array } from "prop-types";
 
 
-export default function InterviewerList(props) {
+
+ function InterviewerList(props) {
+ 
   const interviewerElements = props.interviewers.map (interviewer => {
     return (
       <InterviewerListItem
@@ -22,3 +25,8 @@ export default function InterviewerList(props) {
     </section>
   )
 }
+InterviewerList.propTypes = {
+  interviewers: PropTypes.array.isRequired
+};
+
+export default InterviewerList;
