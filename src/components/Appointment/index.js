@@ -24,6 +24,7 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const DELETING = "DELETING";
 const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_DELETE = "ERROR_DELETE";
 
@@ -54,6 +55,7 @@ export default function Appointment(props) {
     })
   };
 
+  
   const deleteInterview = function(id) {
     props.deleteInterview(id)
     .then (() => {
@@ -96,8 +98,16 @@ export default function Appointment(props) {
       )}
       {mode === CONFIRM && (
         <Confirm message = "Are you sure you want to delete the interview?"
-        onConfirm={() => deleteInterview(props.id)}
+        onConfirm={() => {
+          transition(DELETING)
+          deleteInterview(props.id)}
+        }
         onCancel={() => back()}
+        />
+      )}
+      {mode === DELETING && (
+        <Status message= "Deleting Interview"
+        
         />
       )}
       {mode === EDIT && (
