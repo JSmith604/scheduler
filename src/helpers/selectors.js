@@ -44,6 +44,9 @@ export function getInterviewersForDay(state, day) {
 
 export function getRemainingSpotsForDay (day, appointments) {
     let availableSpots = 0;
+    if(!day.appointments) {
+      return [];
+    }
     day.appointments.forEach( appointmentID => {
       if(appointments[appointmentID].interview === null) {
       availableSpots ++
