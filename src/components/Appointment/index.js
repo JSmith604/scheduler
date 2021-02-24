@@ -35,7 +35,7 @@ export default function Appointment(props) {
     props.interview ? SHOW: EMPTY
   );
 
-  
+
  const save = function(name, interviewer) {
   const interview = {
     student: name,
@@ -57,6 +57,7 @@ export default function Appointment(props) {
 
   
   const deleteInterview = function(id) {
+    transition(DELETING)
     props.deleteInterview(id)
     .then (() => {
       transition(EMPTY);
@@ -74,7 +75,7 @@ export default function Appointment(props) {
    
     <article className="appointments">
       <Header time={props.time}/>
-      {mode === EMPTY && 
+      {mode === EMPTY && props.id && 
         <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
         <Show
@@ -98,10 +99,7 @@ export default function Appointment(props) {
       )}
       {mode === CONFIRM && (
         <Confirm message = "Are you sure you want to delete the interview?"
-        onConfirm={() => {
-          transition(DELETING)
-          deleteInterview(props.id)}
-        }
+        onConfirm={() =>  deleteInterview(props.id)}
         onCancel={() => back()}
         />
       )}
