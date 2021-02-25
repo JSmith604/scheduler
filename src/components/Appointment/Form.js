@@ -33,7 +33,7 @@ export default function Form(props) {
           placeholder="Enter Student Name" 
           defaultValue={name}
           onChange={(event) => setName(event.target.value)} 
-
+          data-testid="student-name-input"
           /*
             This must be a controlled component
           */
@@ -44,7 +44,7 @@ export default function Form(props) {
     <section className="appointment__card-right">
       <section className="appointment__actions">
         <Button danger onClick={props.onCancel} >Cancel</Button>
-        <Button confirm onClick={save} disabled={!name || !interviewer}>Save</Button>
+        <Button confirm onClick={save} disabled={!name || !interviewer} data-testid="save-button">Save</Button>
       </section>
     </section>
   </main>
