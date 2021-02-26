@@ -93,9 +93,6 @@ describe("Application",  () => {
     expect(getByText(appointment, "Are you sure you want to delete the interview?")).toBeInTheDocument();
     fireEvent.click(queryByText(appointment, "Confirm"));
     await waitForElement(() => getByText(appointment, /Could not cancel appointment/i))
-
-      //The problem was we were doing an async call and we werent waiting for the response from the request, needed to put in an extra await. Also removed an unnecessary period. Separated the final await and expected. Did the same for both error functions
-
     expect(getByText(appointment, /Could not cancel appointment/i)).toBeInTheDocument()
   });
 

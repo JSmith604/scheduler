@@ -5,6 +5,7 @@ import { queryHelpers } from "@testing-library/react";
 import "../components/Application.scss";
 
 
+
 const useApplicationData = function (intial) {
   const url = "http://localhost:8001";  
   const [state, setState] = useState({
