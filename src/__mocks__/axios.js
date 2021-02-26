@@ -85,16 +85,6 @@ export default {
   }),
 
   put: jest.fn((url, appointment) => {
-    // console.log(url);
-    // if (url === "http://localhost:8001/api/days") {
-    //   console.log("promise days");
-    //   return Promise.resolve({
-    //     status: 204,
-    //     statusText: "No Content",
-    //     data: fixtures.days
-    //   });
-    // }
-
     if (url.startsWith("http://localhost:8001/api/appointments/")) {
       url.replace("http://localhost:8001/api/appointments/", "")
       const id = Number(url);
@@ -102,21 +92,23 @@ export default {
       return Promise.resolve({
         status: 204,
         statusText: "No Content",
-        // data: fixtures.appointments
       })
     }
+  }),
 
-    // var str = "Hello world, welcome to the universe.";
-    // var n = str.startsWith("Hello");  
-
-    // if (url === "http://localhost:8001/api/interviewers") {
-    //   return Promise.resolve({
-    //     status: 204,
-    //     statusText: "No Content",
-    //     data: fixtures.interviewers
-    //   })
-    // }
+  delete: jest.fn((url, appointment) => {
+    if (url.startsWith("http://localhost:8001/api/appointments/")) {
+      url.replace("http://localhost:8001/api/appointments/", "")
+      const id = Number(url);
+      fixtures.appointments[id] = appointment
+      return Promise.resolve({
+        status: 204,
+        statusText: "No Content",
+      })
+    }
   })
+
+
 }
 
 
