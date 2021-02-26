@@ -1,4 +1,5 @@
 import { string } from "prop-types";
+import axios from "axios";
 
 const fixtures = {
   days: [

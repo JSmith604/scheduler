@@ -33,9 +33,9 @@ describe("Application",  () => {
     const appointment = getAllByTestId(container, "appointment").find(
       appointment => queryByText(appointment, "Archie Cohen")
     );
-    fireEvent.onClick(getByAltText(appointment, "Delete"));
+    fireEvent.click(getByAltText(appointment, "Delete"));
     expect(getByText(appointment, "Are you sure you want to delete the interview?")).toBeInTheDocument();
-    fireEvent.onClick(queryByText(appointment, "Confirm"));
+    fireEvent.click(queryByText(appointment, "Confirm"));
     expect(getByText(appointment, "Deleting Interview")).toBeInTheDocument();
     await waitForElement(() => expect(getByAltText(appointment, "Add")));
     const day = getAllByTestId(container, "day").find(day =>
@@ -77,7 +77,9 @@ describe("Application",  () => {
     });
     fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
     fireEvent.click(getByText(appointment, "Save"));
-    expect(queryByText(appointment, "Could not save appointment")).toBeInTheDocument()
+    
+    await waitForElement(() => queryByText(appointment, /Could not save appointment/i))
+    expect(queryByText(appointment, /Could not save appointment/i)).toBeInTheDocument()
   }); 
 
   it("shows the delete error when failing to delete an existing appointment", async () => {
@@ -87,10 +89,14 @@ describe("Application",  () => {
     const appointment = getAllByTestId(container, "appointment").find(
       appointment => queryByText(appointment, "Archie Cohen")
     );
-    fireEvent.onClick(getByAltText(appointment, "Delete"));
+    fireEvent.click(getByAltText(appointment, "Delete"));
     expect(getByText(appointment, "Are you sure you want to delete the interview?")).toBeInTheDocument();
-    fireEvent.onClick(queryByText(appointment, "Confirm"));
-    expect(getByText(appointment, "Could not cancel appointment")).toBeInTheDocument();
+    fireEvent.click(queryByText(appointment, "Confirm"));
+    await waitForElement(() => getByText(appointment, /Could not cancel appointment/i))
+
+      //The problem was we were doing an async call and we werent waiting for the response from the request, needed to put in an extra await. Also removed an unnecessary period. Separated the final await and expected. Did the same for both error functions
+
+    expect(getByText(appointment, /Could not cancel appointment/i)).toBeInTheDocument()
   });
 
   it("defaults to Monday and changes the schedule when a new day is selected", () => {
