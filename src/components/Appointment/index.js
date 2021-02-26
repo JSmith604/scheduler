@@ -5,7 +5,7 @@ import Header from "./Header";
 import Empty from "./Empty";
 
 import Show from "./Show";
-import { create } from "react-test-renderer";
+
 import useVisualMode from "hooks/useVisualMode";
 
 import Status from "./Status";
@@ -16,9 +16,9 @@ import Form from "./Form";
 
 import Confirm from "./Confirm";
 
-import { getInterviewersForDay } from "helpers/selectors";
 
-const EMPTY = "EMPTY";
+
+const EMPTY = "EMPTY"; //Visual modes
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
@@ -31,10 +31,9 @@ const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   
-  const { mode, transition, back } = useVisualMode(
-    props.interview ? SHOW: EMPTY
-  );
-
+const { mode, transition, back } = useVisualMode( 
+  props.interview ? SHOW: EMPTY
+);
 
  const save = function(name, interviewer) {
   const interview = {
@@ -43,9 +42,7 @@ export default function Appointment(props) {
     
   };
   
-  console.log("interview:", interview);
-
-  transition(SAVING)
+  transition(SAVING)  //Visual mode transition after interview is saved or error when saving 
   props.bookInterview(props.id, interview)
     .then (() => {
       transition(SHOW);
@@ -55,8 +52,7 @@ export default function Appointment(props) {
     })
   };
 
-  
-  const deleteInterview = function(id) {
+  const deleteInterview = function(id) { //Visual mode transition when interview is deleted or fails to delete
     transition(DELETING)
     props.deleteInterview(id)
     .then (() => {
@@ -71,7 +67,7 @@ export default function Appointment(props) {
 
   
 
-  return (
+  return (  //Messages for user in various modes
    
     <article className="appointments"
       data-testid="appointment">
@@ -88,11 +84,8 @@ export default function Appointment(props) {
       )}
       {mode === CREATE && (
         <Form onCancel={() => back()}
-        // name = {props.interview.student}
         interviewers= {props.interviewers}
-        // interviewer= {props.interview.interviewer}
         onSave={save}
-        
         />
       )}
       {mode === SAVING && (
@@ -106,7 +99,6 @@ export default function Appointment(props) {
       )}
       {mode === DELETING && (
         <Status message= "Deleting Interview"
-        
         />
       )}
       {mode === EDIT && (
@@ -117,13 +109,10 @@ export default function Appointment(props) {
          onSave={save}
          />
       )}
-
-
       {mode === ERROR_DELETE && (
         <Error message = "Could not cancel appointment"
         onCancel={() => back()}
         />
-        
       )}
       {mode == ERROR_SAVE && (
         <Error message = "Could not save appointment"

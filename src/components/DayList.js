@@ -7,7 +7,7 @@ import  DayListItem  from "./DayListItem.js";
 export default function DayList(props) {
   const days = props.days.map (day => {
     return (
-    <DayListItem 
+    <DayListItem //Day that interviews can be booked and its attributes
     key={day.id}
     name={day.name} 
     spots={day.spots} 

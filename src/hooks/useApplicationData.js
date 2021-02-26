@@ -4,11 +4,9 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay, getRemainin
 import { queryHelpers } from "@testing-library/react";
 import "../components/Application.scss";
 
-
-
 const useApplicationData = function (intial) {
   const url = "http://localhost:8001";  
-  const [state, setState] = useState({
+  const [state, setState] = useState({  //Setting state
     day: "Monday",
     days: [],
     appointments: {},
@@ -17,15 +15,14 @@ const useApplicationData = function (intial) {
   let dailyAppointments = [];
   let schedule = [];
   
-const setDay = day => setState({ ...state, day });
+const setDay = day => setState({ ...state, day }); //Setting day
 
-  function bookInterview(id, interview) { 
+  function bookInterview(id, interview) { //Schedule interview, updating remaining spot, edit database
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }  
     };
    
-    
     const appointments = {
       ...state.appointments,
       [id]: appointment
@@ -43,7 +40,7 @@ const setDay = day => setState({ ...state, day });
     }) 
   }
   
-  function deleteInterview(id) { 
+  function deleteInterview(id) { //Cancel an interview, update the number of spots available, update database
     const appointment = {
       ...state.appointments[id],
       interview: null  
@@ -74,22 +71,21 @@ const setDay = day => setState({ ...state, day });
   }
 
   )
-  useEffect(() => {
+  useEffect(() => { //axios calls to api
     Promise.all([
       axios.get(url + "/api/days"), 
       axios.get(url + "/api/appointments"), 
       axios.get(url + "/api/interviewers")
     ]).then((all => {
      
-      
-      const [daysResponse, aptsResponse, interviewersResponse] = all;
-      
-      setState({...state, 
-        days: daysResponse.data,
-        appointments: aptsResponse.data,
-        interviewers: interviewersResponse.data
-      });
-    }))
+    const [daysResponse, aptsResponse, interviewersResponse] = all;
+    
+    setState({...state, 
+      days: daysResponse.data,
+      appointments: aptsResponse.data,
+      interviewers: interviewersResponse.data
+    });
+  }))
     .catch((error) => {
       console.log(error);
     });

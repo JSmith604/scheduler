@@ -3,6 +3,7 @@ import { getInterview } from "helpers/selectors";
 import { getInterviewersForDay } from "helpers/selectors";
 import { getRemainingSpotsForDay } from "helpers/selectors";
 
+//Test helper functions to make sure they are working as expected
 
 const state = {
   days: [
@@ -105,7 +106,6 @@ test("getInterviewersForDay returns an array with a length matching the number o
 
 test("getInterviewersForDay returns an array containing the correct interviewer objects", () => {
   const result = getInterviewersForDay(state, "Tuesday");
-  // expect(forth).toEqual(null);
   expect(result).toEqual([state.interviewers["2"]]);
 });
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Status(props) {
+export default function Status(props) { //Message that indications appointment saving or deleting
 
   return(
     <main className="appointment__card appointment__card--status">
